@@ -1,6 +1,6 @@
 # Randomon
 
-Randomon is a free and open-source Pokémon-inspired game, built using SDL. The game is procedurally generated when the player selects "New Game". The entire adventure, including the plot, NPCs, creature sprites, their stats and movesets, the overworld layout, and gym leaders (called "Type Masters") are generated ahead of time, ensuring a unique and dynamic experience for each playthrough.
+Randomon is a free and open-source Pokémon-inspired game, built using SDL. The game is generated ahead of the time using AI tools when the player selects "New Game". The entire adventure, including the plot, NPCs, creature sprites, their stats and movesets, the overworld layout, and gym leaders (called "Type Masters") are generated ahead of time, ensuring a unique and dynamic experience for each playthrough.
 
 ![Randomon Screenshot](https://i.imgur.com/randomonscreenshot.jpg)
 
