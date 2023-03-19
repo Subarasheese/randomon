@@ -12,6 +12,11 @@ static void process_events();
 static void update();
 static void render();
 
+// Global variables
+SDL_Renderer *g_renderer = NULL;
+SDL_Rect g_camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+bool g_running = false;
+
 // Initialize the game
 bool game_init(SDL_Window *window) {
     // Initialize the renderer
@@ -61,7 +66,17 @@ static void process_events() {
 
 // Update game logic
 static void update() {
-    // Update game state here
+    // Update game state and player position here
+
+    // Update camera position based on player position
+    g_camera.x = (player.x + player.width / 2) - SCREEN_WIDTH / 2;
+    g_camera.y = (player.y + player.height / 2) - SCREEN_HEIGHT / 2;
+
+    // Make sure the camera doesn't go outside the game world boundaries
+    if (g_camera.x < 0) g_camera.x = 0;
+    if (g_camera.y < 0) g_camera.y = 0;
+    if (g_camera.x > LEVEL_WIDTH - g_camera.w) g_camera.x = LEVEL_WIDTH - g_camera.w;
+    if (g_camera.y > LEVEL_HEIGHT - g_camera.h) g_camera.y = LEVEL_HEIGHT - g_camera.h;
 }
 
 // Render game
@@ -71,6 +86,9 @@ static void render() {
     SDL_RenderClear(g_renderer);
 
     // Render game objects here
+    render_background(&g_camera);
+    render_player(&g_camera);
+    render_enemies(&g_camera);
 
     // Update the screen
     SDL_RenderPresent(g_renderer);
