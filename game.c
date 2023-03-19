@@ -110,23 +110,48 @@ static void process_events() {
     }
 }
 
+bool is_collision(int x, int y, Player *player) {
+    int tile_size = 32;
+    int left_tile = x / tile_size;
+    int top_tile = y / tile_size;
+    int right_tile = (x + player->width - 1) / tile_size;
+    int bottom_tile = (y + player->height - 1) / tile_size;
+
+    // Check if any of the four corners of the player's new position collide with solid tiles
+    if (world[top_tile][left_tile].solid || world[top_tile][right_tile].solid ||
+        world[bottom_tile][left_tile].solid || world[bottom_tile][right_tile].solid) {
+        return true;
+    }
+
+    return false;
+}
 
 // Update game logic
 static void update() {
-    // Update the player's position based on their direction and speed
-    switch (player.direction) {
+    // ...
+    // Calculate the new position based on player's direction and speed
+    int new_x = player.x;
+    int new_y = player.y;
+
+       switch (player.direction) {
         case DIR_UP:
-            player.y -= player.speed;
+            new_y -= player.speed;
             break;
         case DIR_DOWN:
-            player.y += player.speed;
+            new_y += player.speed;
             break;
         case DIR_LEFT:
-            player.x -= player.speed;
+            new_x -= player.speed;
             break;
         case DIR_RIGHT:
-            player.x += player.speed;
+            new_x += player.speed;
             break;
+    }
+
+    // Check for collision with solid tiles
+    if (!is_collision(new_x, new_y, &player)) {
+        player.x = new_x;
+        player.y = new_y;
     }
 
     // Ensure the player stays within the grid and on-screen
