@@ -22,7 +22,9 @@ typedef struct {
     int x, y;
     int width, height;
     int speed;
-    int direction;
+    Direction direction;
+    bool moving;
+    int move_timer;
 } Player;
 
 // Directions
