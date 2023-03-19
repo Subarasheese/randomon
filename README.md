@@ -17,7 +17,7 @@ Randomon is a free and open-source Pokémon-inspired game, built using SDL. The 
 
 ## Features
 
-  *  **Procedurally Generated Adventure** : Randomon generates an entirely new adventure each time you start a new game, offering a unique experience and endless replayability.
+  *  **AI Generated Adventure** : Randomon generates an entirely new adventure each time you start a new game, offering a unique experience and endless replayability.
   *  **Stable Diffusion Graphics** : Graphics are generated ahead of time using stable diffusion, while trying to maintain a concise and homogeneous style throughout the game.
   *  **Dynamic Music and Sounds** : The game might feature a variety of permissive/creative commons licensed music and sounds, downloaded from the internet to provide a diverse auditory experience.
   *  **AI-Generated Texts** : Randomon is intended to make use of language model backends such as OpenAI's APIs or locally hosted language models like Meta's LLaMa for generating engaging dialogues and stories.
