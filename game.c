@@ -135,25 +135,52 @@ static void update() {
     int new_x = player.x;
     int new_y = player.y;
 
-       switch (player.direction) {
-        case DIR_UP:
-            new_y -= player.speed;
-            break;
-        case DIR_DOWN:
-            new_y += player.speed;
-            break;
-        case DIR_LEFT:
-            new_x -= player.speed;
-            break;
-        case DIR_RIGHT:
-            new_x += player.speed;
-            break;
-    }
+    if (!player.moving) {
+        // Calculate the new position based on player's direction and speed
+        int new_x = player.x;
+        int new_y = player.y;
 
-    // Check for collision with solid tiles
-    if (!is_collision(new_x, new_y, &player)) {
-        player.x = new_x;
-        player.y = new_y;
+        switch (player.direction) {
+            case DIR_UP:
+                new_y -= player.height;
+                break;
+            case DIR_DOWN:
+                new_y += player.height;
+                break;
+            case DIR_LEFT:
+                new_x -= player.width;
+                break;
+            case DIR_RIGHT:
+                new_x += player.width;
+                break;
+        }
+
+        // Check for collision with solid tiles
+        if (!is_collision(new_x, new_y, &player)) {
+            player.moving = true;
+            player.move_timer = player.speed;
+        }
+    } else {
+        player.move_timer--;
+
+        switch (player.direction) {
+            case DIR_UP:
+                player.y -= player.height / player.speed;
+                break;
+            case DIR_DOWN:
+                player.y += player.height / player.speed;
+                break;
+            case DIR_LEFT:
+                player.x -= player.width / player.speed;
+                break;
+            case DIR_RIGHT:
+                player.x += player.width / player.speed;
+                break;
+        }
+
+        if (player.move_timer <= 0) {
+            player.moving = false;
+        }
     }
 
     // Ensure the player stays within the grid and on-screen
