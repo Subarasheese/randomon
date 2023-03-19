@@ -28,20 +28,20 @@ Randomon is a free and open-source Pokémon-inspired game, built using SDL. The 
 ## Installation
     
     
-    ```sh
-    git clone https://github.com/yourusername/randomon.git
-    cd randomon
-    ./install.sh
-    ```
+```sh
+git clone https://github.com/yourusername/randomon.git
+cd randomon
+./install.sh
+```
 
 ## Usage
 
 To start a new game, simply run:
     
     
-    ```sh
-    ./randomon
-    ```
+```sh
+./randomon
+```
 
 The game will then generate a new adventure, and you can begin your unique journey in the world of Randomon.
 
