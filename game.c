@@ -17,6 +17,25 @@ SDL_Renderer *g_renderer = NULL;
 SDL_Rect g_camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 bool g_running = false;
 
+
+typedef struct {
+    int x, y;
+    int width, height;
+    int speed;
+    int direction;
+} Player;
+
+// Directions
+enum {
+    DIR_UP,
+    DIR_DOWN,
+    DIR_LEFT,
+    DIR_RIGHT
+};
+
+Player player = {100, 100, 32, 32, 2, DIR_DOWN};
+
+
 // Initialize the game
 bool game_init(SDL_Window *window) {
     // Initialize the renderer
@@ -60,24 +79,55 @@ static void process_events() {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             g_running = false;
+        } else if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
+                case SDLK_UP:
+                    player.direction = DIR_UP;
+                    break;
+                case SDLK_DOWN:
+                    player.direction = DIR_DOWN;
+                    break;
+                case SDLK_LEFT:
+                    player.direction = DIR_LEFT;
+                    break;
+                case SDLK_RIGHT:
+                    player.direction = DIR_RIGHT;
+                    break;
+            }
         }
     }
 }
 
+
 // Update game logic
 static void update() {
-    // Update game state and player position here
+    // Update the player's position based on their direction and speed
+    switch (player.direction) {
+        case DIR_UP:
+            player.y -= player.speed;
+            break;
+        case DIR_DOWN:
+            player.y += player.speed;
+            break;
+        case DIR_LEFT:
+            player.x -= player.speed;
+            break;
+        case DIR_RIGHT:
+            player.x += player.speed;
+            break;
+    }
 
-    // Update camera position based on player position
-    g_camera.x = (player.x + player.width / 2) - SCREEN_WIDTH / 2;
-    g_camera.y = (player.y + player.height / 2) - SCREEN_HEIGHT / 2;
+    // Ensure the player stays within the grid and on-screen
+    int gridSize = 32;
+    player.x = (player.x / gridSize) * gridSize;
+    player.y = (player.y / gridSize) * gridSize;
 
-    // Make sure the camera doesn't go outside the game world boundaries
-    if (g_camera.x < 0) g_camera.x = 0;
-    if (g_camera.y < 0) g_camera.y = 0;
-    if (g_camera.x > LEVEL_WIDTH - g_camera.w) g_camera.x = LEVEL_WIDTH - g_camera.w;
-    if (g_camera.y > LEVEL_HEIGHT - g_camera.h) g_camera.y = LEVEL_HEIGHT - g_camera.h;
+    if (player.x < 0) player.x = 0;
+    if (player.y < 0) player.y = 0;
+    if (player.x > SCREEN_WIDTH - player.width) player.x = SCREEN_WIDTH - player.width;
+    if (player.y > SCREEN_HEIGHT - player.height) player.y = SCREEN_HEIGHT - player.height;
 }
+
 
 // Render game
 static void render() {
@@ -86,10 +136,9 @@ static void render() {
     SDL_RenderClear(g_renderer);
 
     // Render game objects here
-    render_background(&g_camera);
-    render_player(&g_camera);
-    render_enemies(&g_camera);
+    render_player(&player, &g_camera);
 
     // Update the screen
     SDL_RenderPresent(g_renderer);
 }
+
