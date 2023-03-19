@@ -36,6 +36,18 @@ enum {
 Player player = {100, 100, 32, 32, 2, DIR_DOWN};
 
 
+// Overworld dimensions
+#define WORLD_WIDTH 100
+#define WORLD_HEIGHT 100
+
+typedef struct {
+    int id;
+    bool solid;
+} Tile;
+
+Tile world[WORLD_HEIGHT][WORLD_WIDTH];
+
+
 // Initialize the game
 bool game_init(SDL_Window *window) {
     // Initialize the renderer
@@ -44,12 +56,12 @@ bool game_init(SDL_Window *window) {
         fprintf(stderr, "Renderer could not be created! SDL Error: %s\n", SDL_GetError());
         return false;
     }
-
+    create_overworld();
     // Initialize graphics and audio
     if (!graphics_init() || !audio_init()) {
         return false;
     }
-
+    
     // Start the game
     g_running = true;
 
@@ -128,13 +140,26 @@ static void update() {
     if (player.y > SCREEN_HEIGHT - player.height) player.y = SCREEN_HEIGHT - player.height;
 }
 
+static void create_overworld() {
+    // Fill the world array with tile data
+    // Use 0 for non-solid tiles and 1 for solid tiles
+    // For example:
+
+    for (int y = 0; y < WORLD_HEIGHT; y++) {
+        for (int x = 0; x < WORLD_WIDTH; x++) {
+            world[y][x].id = (x == 0 || y == 0 || x == WORLD_WIDTH - 1 || y == WORLD_HEIGHT - 1) ? 1 : 0;
+            world[y][x].solid = (world[y][x].id == 1);
+        }
+    }
+}
+
 
 // Render game
 static void render() {
     // Clear the screen
     SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 255);
     SDL_RenderClear(g_renderer);
-
+    render_overworld(world, &g_camera);
     // Render game objects here
     render_player(&player, &g_camera);
 
